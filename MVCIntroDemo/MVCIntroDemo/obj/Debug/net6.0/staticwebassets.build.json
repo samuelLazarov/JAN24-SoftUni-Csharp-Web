@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "2En5VLGyiIIEgnt6SFwkfY+j2p7oeBEuFFbY9X30AM0=",
+  "Hash": "NQEo8sg+590Z07OUa6GdL1Cu1DYt5A4LPWPA/O5wdVw=",
   "Source": "MVCIntroDemo",
   "BasePath": "_content/MVCIntroDemo",
   "Mode": "Default",
@@ -83,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\MVCIntroDemo\\MVCIntroDemo\\wwwroot\\js\\numbers.js",
+      "SourceId": "MVCIntroDemo",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\MVCIntroDemo\\MVCIntroDemo\\wwwroot\\",
+      "BasePath": "_content/MVCIntroDemo",
+      "RelativePath": "js/numbers.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\numbers.js"
     },
     {
       "Identity": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\MVCIntroDemo\\MVCIntroDemo\\wwwroot\\js\\site.js",

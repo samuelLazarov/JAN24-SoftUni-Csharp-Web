@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\MVCIntroDemo\\MVCIntroDemo\\wwwroot\\js\\numbers.js",
+      "PackagePath": "staticwebassets\\js\\numbers.js"
+    },
+    {
       "Id": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\MVCIntroDemo\\MVCIntroDemo\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

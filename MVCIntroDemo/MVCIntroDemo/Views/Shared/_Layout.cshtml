@@ -26,7 +26,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                 Products
+                            </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">All</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="AllAsJson">All (Json)</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="AllAsPlainText">All (Plain Text)</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Product" asp-action="DownloadAll">All (Text File)</a></li>
+                                </ul>
+                            </a>
                         </li>
                     </ul>
                 </div>
