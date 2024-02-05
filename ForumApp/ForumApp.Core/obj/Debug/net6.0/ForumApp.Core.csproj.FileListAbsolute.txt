@@ -1,0 +1,15 @@
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\bin\Debug\net6.0\ForumApp.Core.deps.json
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\bin\Debug\net6.0\ForumApp.Core.dll
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\bin\Debug\net6.0\ForumApp.Core.pdb
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\bin\Debug\net6.0\ForumApp.Infrastructure.dll
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\bin\Debug\net6.0\ForumApp.Infrastructure.pdb
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ForumApp.Core.csproj.AssemblyReference.cache
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ForumApp.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ForumApp.Core.AssemblyInfoInputs.cache
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ForumApp.Core.AssemblyInfo.cs
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ForumApp.Core.csproj.CoreCompileInputs.cache
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ForumApp.Core.csproj.CopyComplete
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ForumApp.Core.dll
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\refint\ForumApp.Core.dll
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ForumApp.Core.pdb
+D:\Softuni\SoftUni C#Web\Projects\JAN24-SoftUni-Csharp-Web\ForumApp\ForumApp.Core\obj\Debug\net6.0\ref\ForumApp.Core.dll
