@@ -49,15 +49,19 @@ namespace ForumApp.Core.Services
 
 		}
 
-        public async Task EditAsync(PostModel model)
+        public async Task DeleteAsync(int id)
 		{
-			var entity = await context.FindAsync<Post>(model.Id);
-			if (entity == null)
-			{
-				throw new ApplicationException("Invalid Post");
-			}
+			var entity = await GetEntityByIdAsync(id);
+			context.Remove(entity);
+			await context.SaveChangesAsync();
 
-			entity.Title = model.Title;
+		}
+
+		public async Task EditAsync(PostModel model)
+		{
+			var entity = await GetEntityByIdAsync(model.Id);
+
+            entity.Title = model.Title;
 			entity.Content = model.Content;
 
 			await context.SaveChangesAsync();
@@ -89,6 +93,17 @@ namespace ForumApp.Core.Services
 				})
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
+        }
+
+		private async Task<Post> GetEntityByIdAsync(int id)
+		{
+            var entity = await context.FindAsync<Post>(id);
+            if (entity == null)
+            {
+                throw new ApplicationException("Invalid post");
+            }
+
+			return entity;
         }
     }
 }
