@@ -13,6 +13,7 @@ namespace ForumApp.Controllers
 			postService = _postService;
         }
 
+		[HttpGet]
         public async Task<IActionResult> Index()
 		{
 			IEnumerable<PostModel> model = await postService.GetAllPostsAsync();
@@ -20,12 +21,14 @@ namespace ForumApp.Controllers
 			return View(model);
 		}
 
+		[HttpGet]
 		public IActionResult Add()
 		{
 			var model = new PostModel();	
 			return View(model);
 		}
 
+		[HttpPost]
 		public async Task<IActionResult> Add(PostModel model)
 		{
 			if (ModelState.IsValid == false)
@@ -37,5 +40,19 @@ namespace ForumApp.Controllers
 
 			return RedirectToAction(nameof(Index));
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> Edit(int id)
+		{
+			PostModel? model = await postService.GetByIdAsync(id);
+
+			if (model == null)
+			{
+
+			}
+
+			return View(model);
+		}
+
 	}
 }

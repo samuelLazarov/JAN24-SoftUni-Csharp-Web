@@ -61,5 +61,19 @@ namespace ForumApp.Core.Services
 				.AsNoTracking()
 				.ToListAsync();
 		}
-	}
+
+        public async Task<PostModel?> GetByIdAsync(int id)
+        {
+			return await context.Posts
+				.Where(p => p.Id == id)
+				.Select(p => new PostModel()
+				{
+					Id = p.Id,
+					Title = p.Title,
+					Content = p.Content
+				})
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+        }
+    }
 }
