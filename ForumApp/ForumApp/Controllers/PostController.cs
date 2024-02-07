@@ -48,10 +48,23 @@ namespace ForumApp.Controllers
 
 			if (model == null)
 			{
-
+				ModelState.AddModelError("All", "Invalid post");
 			}
 
 			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(PostModel model)
+		{
+			if(ModelState.IsValid == false)
+			{
+				return View(model);
+			}
+
+			await postService.EditAsync(model);
+
+			return RedirectToAction(nameof(Index));
 		}
 
 	}

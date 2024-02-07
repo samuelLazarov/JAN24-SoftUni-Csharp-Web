@@ -49,6 +49,21 @@ namespace ForumApp.Core.Services
 
 		}
 
+        public async Task EditAsync(PostModel model)
+		{
+			var entity = await context.FindAsync<Post>(model.Id);
+			if (entity == null)
+			{
+				throw new ApplicationException("Invalid Post");
+			}
+
+			entity.Title = model.Title;
+			entity.Content = model.Content;
+
+			await context.SaveChangesAsync();
+
+		}
+
 		public async Task<IEnumerable<PostModel>> GetAllPostsAsync()
 		{
 			return await context.Posts
