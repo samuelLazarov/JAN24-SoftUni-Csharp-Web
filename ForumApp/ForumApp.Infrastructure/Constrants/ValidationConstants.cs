@@ -29,5 +29,9 @@ namespace ForumApp.Infrastructure.Constrants
 		/// </summary>
 		public const int ContentMinLenght = 30;
 
+		public const string RequireErrorMessage = "The {0} field is required";
+
+		public const string StringLengthErrorMessage = "The {0} field must be between {2} and {1} characters long";
+
 	}
 }
