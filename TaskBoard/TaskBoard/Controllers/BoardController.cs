@@ -26,7 +26,6 @@ namespace TaskBoard.Controllers
                         .Select(t => new TaskViewModel() 
                         {
                             Id = t.Id,
-                            CreatedOn = t.CreatedOn,
                             Title = t.Title,
                             Description = t.Description,
                             Owner = t.Owner.UserName,
