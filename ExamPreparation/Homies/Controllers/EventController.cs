@@ -1,11 +1,14 @@
 ﻿using Homies.Data;
 using Homies.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace Homies.Controllers
 {
+    [Authorize]
     public class EventController : Controller
     {
         private readonly HomiesDbContext data;
@@ -25,7 +28,6 @@ namespace Homies.Controllers
                 e.Start,
                 e.Type.Name,
                 e.Organiser.UserName
-                   
                 ))
                 .ToListAsync();
 
@@ -35,51 +37,259 @@ namespace Homies.Controllers
         [HttpPost]
         public async Task<IActionResult> Join(int id)
         {
-            return View();
+            var e = await data.Events
+                .Where(e => e.Id == id)
+                .Include(e => e.EventsParticipants)
+                .FirstOrDefaultAsync();
+            
+            if (e == null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            if (!e.EventsParticipants.Any(p => p.HelperId == userId))
+            {
+                e.EventsParticipants.Add(new EventParticipant()
+                {
+                    EventId = e.Id,
+                    HelperId = userId
+                });
+
+                await data.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Joined));
         }
 
         [HttpGet]
         public async Task<IActionResult> Joined()
         {
-            return View();
+            string userId = GetUserId();
+
+            var model = await data.EventParticipants
+                .Where(ep => ep.HelperId == userId)
+                .AsNoTracking()
+                .Select(ep => new EventInfoViewModel(
+                    ep.EventId,
+                    ep.Event.Name,
+                    ep.Event.Start,
+                    ep.Event.Type.Name,
+                    ep.Event.Organiser.UserName
+                ))
+                .ToListAsync();
+
+            return View(model);
         }
 
         public async Task<IActionResult> Leave(int id)
         {
-            return View();
+            var e = await data.Events
+                .Where(e => e.Id == id)
+                .Include(e => e.EventsParticipants)
+                .FirstOrDefaultAsync();
+
+            if (e == null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            var ep = e.EventsParticipants
+                .FirstOrDefault(ep => ep.HelperId == userId);
+
+            if (ep == null)
+            {
+                return BadRequest();
+            }
+
+            e.EventsParticipants.Remove(ep);
+
+            await data.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
         }
 
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            return View();
+            var model = new EventFormViewModel();
+            model.Types = await GetTypes();
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(EventFormViewModel model)
         {
-            return View();
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            if (!DateTime.TryParseExact(
+                model.Start,
+                DataConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out start))
+            {
+                ModelState
+                    .AddModelError(nameof(model.Start), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+            }
+
+            if (!DateTime.TryParseExact(
+                model.End,
+                DataConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out end))
+            {
+                ModelState
+                    .AddModelError(nameof(model.End), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+                   
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.Types = await GetTypes();
+                return View(model);
+            }
+
+            var entity = new Event()
+            {
+                CreatedOn = DateTime.Now,
+                Description = model.Description,
+                Name = model.Name,
+                OrganiserId = GetUserId(),
+                TypeId = model.TypeId,
+                Start = start,
+                End = end
+            };
+
+            await data.AddAsync(entity);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var e = await data.Events
+                .FindAsync(id);
+
+            if (e == null)
+            {
+                return BadRequest();
+            }
+
+            if (e.OrganiserId != GetUserId())
+            {
+                return Unauthorized();
+            }
+
+            var model = new EventFormViewModel()
+            {
+                Description = e.Description,
+                Name = e.Name,
+                End = e.End.ToString(DataConstants.DateFormat),
+                Start = e.Start.ToString(DataConstants.DateFormat),
+                TypeId = e.TypeId
+            };
+
+            model.Types = await GetTypes();
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EventFormViewModel model, int id)
         {
-            return View();
+
+            var e = await data.Events
+                .FindAsync(id);
+
+            if (e == null)
+            {
+                return BadRequest();
+            }
+
+            if (e.OrganiserId != GetUserId())
+            {
+                return Unauthorized();
+            }
+
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            if (!DateTime.TryParseExact(
+                model.Start,
+                DataConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out start))
+            {
+                ModelState
+                    .AddModelError(nameof(model.Start), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+            }
+
+            if (!DateTime.TryParseExact(
+                model.End,
+                DataConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out end))
+            {
+                ModelState
+                    .AddModelError(nameof(model.End), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.Types = await GetTypes();
+                return View(model);
+            }
+
+            e.Start = start;
+            e.End = end;
+            e.Description = model.Description;
+            e.Name = model.Name;
+            e.TypeId = model.TypeId;
+
+            await data.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            return View();
+            var model = await data.Events
+                .Where(e => e.Id == id)
+                .AsNoTracking()
+                .Select(e => new EventDetailsViewModel()
+                {
+                    Id = e.Id,
+                    CreatedOn = e.CreatedOn.ToString(DataConstants.DateFormat),
+                    Description = e.Description,
+                    End = e.End.ToString(DataConstants.DateFormat),
+                    Name = e.Name,
+                    Organiser = e.Organiser.UserName,
+                    Start = e.Start.ToString(DataConstants.DateFormat),
+                    Type = e.Type.Name
+                })
+                .FirstOrDefaultAsync();
+            
+            if (model == null) 
+            {
+                return BadRequest();
+            }
+
+            return View(model);
         }
 
 
-        public string GetUserId()
+        private string GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
         }

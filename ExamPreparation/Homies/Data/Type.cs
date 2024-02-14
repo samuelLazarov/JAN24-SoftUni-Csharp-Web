@@ -8,9 +8,9 @@ namespace Homies.Data
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(TypeNameMaximumLength)]
+        [MaxLength(DataConstants.TypeNameMaximumLength)]
         public string Name { get; set; } = string.Empty;
 
-        public IEnumerable<Event> Events { get; set; } = new List<Event>()
+        public IEnumerable<Event> Events { get; set; } = new List<Event>();
     }
 }
