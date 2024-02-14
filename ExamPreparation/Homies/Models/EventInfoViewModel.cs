@@ -1,4 +1,4 @@
-﻿using Homies.Data;
+﻿ using Homies.Data;
 
 namespace Homies.Models
 {

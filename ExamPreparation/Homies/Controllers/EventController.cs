@@ -169,7 +169,7 @@ namespace Homies.Controllers
             await data.AddAsync(entity);
             await data.SaveChangesAsync();
 
-            return RedirectT oAction(nameof(All));
+            return RedirectToAction(nameof(All));
         }
 
         [HttpGet]
