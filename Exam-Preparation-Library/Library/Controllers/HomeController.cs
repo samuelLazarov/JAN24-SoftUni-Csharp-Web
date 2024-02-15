@@ -4,10 +4,15 @@ using System.Diagnostics;
 
 namespace Library.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public IActionResult Index()
         {
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("All", "Book");
+            }
+
             return View();
         }
 
