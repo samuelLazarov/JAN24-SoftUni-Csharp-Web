@@ -262,6 +262,40 @@ namespace Homies.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var currentEvent = await data.Events
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync();
+
+            var eventParticipants = await data.EventParticipants
+                .Where(ep => ep.EventId == id)
+                .ToListAsync();
+
+            if (currentEvent == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentEvent.OrganiserId != GetUserId())
+            {
+                return Unauthorized();
+            }
+
+            if (eventParticipants != null && eventParticipants.Any())
+            {
+                data.EventParticipants.RemoveRange(eventParticipants);
+            }
+
+            data.Events.Remove(currentEvent);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+
+        }
+
+
         public async Task<IActionResult> Details(int id)
         {
             var model = await data.Events

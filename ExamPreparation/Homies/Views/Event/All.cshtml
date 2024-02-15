@@ -21,6 +21,7 @@
             @if (User.Identity.Name == e.Organiser)
             {
                 <a asp-controller="Event" asp-action="Edit" asp-route-id="@e.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Edit</a>
+                <a asp-controller="Event" asp-action="Delete" asp-route-id="@e.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Delete</a>
             }
             else
             {
