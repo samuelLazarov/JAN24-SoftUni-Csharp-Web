@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Library.Data
+namespace Library.Data.Models
 {
     [Comment("User Books")]
     public class IdentityUserBook

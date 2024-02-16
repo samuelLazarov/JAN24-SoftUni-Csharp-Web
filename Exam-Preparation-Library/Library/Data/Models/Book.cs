@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Library.Data
+namespace Library.Data.Models
 {
     [Comment("Books for the library")]
     public class Book
@@ -21,7 +21,7 @@ namespace Library.Data
         [MaxLength(50)]
         public string Author { get; set; } = null!;
 
-        [Comment("Desccription of the book")]
+        [Comment("Description of the book")]
         [Required]
         [MaxLength(5000)]
         public string Description { get; set; } = null!;

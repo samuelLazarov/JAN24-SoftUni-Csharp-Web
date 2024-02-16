@@ -107,7 +107,6 @@ namespace Library.Areas.Identity.Pages.Account
                 return RedirectToAction("All", "Book");
             }
             
-            
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 

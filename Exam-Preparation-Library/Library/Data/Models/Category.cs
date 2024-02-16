@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace Library.Data
+namespace Library.Data.Models
 {
+    [Comment("Categories for the books")]
     public class Category
     {
         [Comment("Primary key")]

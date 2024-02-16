@@ -1,5 +1,6 @@
 ﻿using Library.Contracts;
 using Library.Data;
+using Library.Data.Models;
 using Library.Models;
 using Microsoft.EntityFrameworkCore;
 
