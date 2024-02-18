@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\ExamPreparation\\Homies\\Homies.csproj": {}
+    "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-WebBasic\\ExamPreparation-Homies\\Homies\\Homies.csproj": {}
   },
   "projects": {
-    "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\ExamPreparation\\Homies\\Homies.csproj": {
+    "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-WebBasic\\ExamPreparation-Homies\\Homies\\Homies.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\ExamPreparation\\Homies\\Homies.csproj",
+        "projectUniqueName": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-WebBasic\\ExamPreparation-Homies\\Homies\\Homies.csproj",
         "projectName": "Homies",
-        "projectPath": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\ExamPreparation\\Homies\\Homies.csproj",
+        "projectPath": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-WebBasic\\ExamPreparation-Homies\\Homies\\Homies.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\ExamPreparation\\Homies\\obj\\",
+        "outputPath": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-WebBasic\\ExamPreparation-Homies\\Homies\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",

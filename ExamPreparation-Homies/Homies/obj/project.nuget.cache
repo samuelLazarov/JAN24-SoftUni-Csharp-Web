@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+iVtLffTTEOpJqxTpLwnK8j8GeanvN4ASeQkIC8TfssZxIK+5lsJoK7Mq65NJ8cMiQXDVdZVXxCww7j2EpnN4g==",
+  "dgSpecHash": "4oWH82+KDABvfb0v9h/ucqINRrY3lxvxPVKZBB2cfks7dScVRvr+htrrRPdUt5b7/rGjD+VttKdkdGjL7Vxp5A==",
   "success": true,
-  "projectFilePath": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-Web\\ExamPreparation\\Homies\\Homies.csproj",
+  "projectFilePath": "D:\\Softuni\\SoftUni C#Web\\Projects\\JAN24-SoftUni-Csharp-WebBasic\\ExamPreparation-Homies\\Homies\\Homies.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
