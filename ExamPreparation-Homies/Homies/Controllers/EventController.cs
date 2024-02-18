@@ -11,18 +11,18 @@ namespace Homies.Controllers
     [Authorize]
     public class EventController : Controller
     {
-        private readonly HomiesDbContext data;
+        private readonly HomiesDbContext dbContext;
 
-        public EventController(HomiesDbContext context)
+        public EventController(HomiesDbContext dbContext)
         {
-            data = context;
+            this.dbContext = dbContext;
         }
 
         public async Task<IActionResult> All()
         {
-            var events = await data.Events
+            var allEvents = await dbContext.Events
                 .AsNoTracking()
-                .Select(e => new EventInfoViewModel(
+                .Select(e => new EventAllViewModel(
                 e.Id,
                 e.Name,
                 e.Start,
@@ -31,33 +31,33 @@ namespace Homies.Controllers
                 ))
                 .ToListAsync();
 
-            return View(events);
+            return View(allEvents);
         }
 
         [HttpPost]
         public async Task<IActionResult> Join(int id)
         {
-            var e = await data.Events
+            var currentEvent = await dbContext.Events
                 .Where(e => e.Id == id)
                 .Include(e => e.EventsParticipants)
                 .FirstOrDefaultAsync();
             
-            if (e == null)
+            if (currentEvent == null)
             {
                 return BadRequest();
             }
 
-            string userId = GetUserId();
+            string currentUserId = GetUserId();
 
-            if (!e.EventsParticipants.Any(p => p.HelperId == userId))
+            if (!currentEvent.EventsParticipants.Any(p => p.HelperId == currentUserId))
             {
-                e.EventsParticipants.Add(new EventParticipant()
+                currentEvent.EventsParticipants.Add(new EventParticipant()
                 {
-                    EventId = e.Id,
-                    HelperId = userId
+                    EventId = currentEvent.Id,
+                    HelperId = currentUserId
                 });
 
-                await data.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
             }
 
             return RedirectToAction(nameof(Joined));
@@ -66,12 +66,12 @@ namespace Homies.Controllers
         [HttpGet]
         public async Task<IActionResult> Joined()
         {
-            string userId = GetUserId();
+            string currentUserId = GetUserId();
 
-            var model = await data.EventParticipants
-                .Where(ep => ep.HelperId == userId)
+            var currentUserEvents = await dbContext.EventParticipants
+                .Where(ep => ep.HelperId == currentUserId)
                 .AsNoTracking()
-                .Select(ep => new EventInfoViewModel(
+                .Select(ep => new EventAllViewModel(
                     ep.EventId,
                     ep.Event.Name,
                     ep.Event.Start,
@@ -80,34 +80,34 @@ namespace Homies.Controllers
                 ))
                 .ToListAsync();
 
-            return View(model);
+            return View(currentUserEvents);
         }
 
         public async Task<IActionResult> Leave(int id)
         {
-            var e = await data.Events
+            var currentEvent = await dbContext.Events
                 .Where(e => e.Id == id)
                 .Include(e => e.EventsParticipants)
                 .FirstOrDefaultAsync();
 
-            if (e == null)
+            if (currentEvent == null)
             {
                 return BadRequest();
             }
 
-            string userId = GetUserId();
+            string currentUserId = GetUserId();
 
-            var ep = e.EventsParticipants
-                .FirstOrDefault(ep => ep.HelperId == userId);
+            var eventParticipant = currentEvent.EventsParticipants
+                .FirstOrDefault(ep => ep.HelperId == currentUserId);
 
-            if (ep == null)
+            if (eventParticipant == null)
             {
                 return BadRequest();
             }
 
-            e.EventsParticipants.Remove(ep);
+            currentEvent.EventsParticipants.Remove(eventParticipant);
 
-            await data.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
         }
@@ -115,59 +115,76 @@ namespace Homies.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var model = new EventFormViewModel();
+            var model = new EventAddViewModel();
             model.Types = await GetTypes();
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(EventFormViewModel model)
+        public async Task<IActionResult> Add(EventAddViewModel eventForm)
         {
+            
+            if (eventForm == null)
+            {
+                return BadRequest();
+            }
+            
             DateTime start = DateTime.Now;
             DateTime end = DateTime.Now;
 
             if (!DateTime.TryParseExact(
-                model.Start,
+                eventForm.Start,
                 DataConstants.DateFormat,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out start))
             {
                 ModelState
-                    .AddModelError(nameof(model.Start), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+                    .AddModelError(nameof(eventForm.Start), $"Invalid date! Format must be: {DataConstants.DateFormat}");
             }
 
             if (!DateTime.TryParseExact(
-                model.End,
+                eventForm.End,
                 DataConstants.DateFormat,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out end))
             {
                 ModelState
-                    .AddModelError(nameof(model.End), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+                    .AddModelError(nameof(eventForm.End), $"Invalid date! Format must be: {DataConstants.DateFormat}");
                    
             }
 
             if (!ModelState.IsValid)
             {
-                model.Types = await GetTypes();
-                return View(model);
+                //This is used to show the error messages of the ModelState
+                List<string> errorMessages = new List<string>();
+
+                foreach (var entry in ModelState)
+                {
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        errorMessages.Add(error.ErrorMessage);
+                    }
+                }
+
+                eventForm.Types = await GetTypes();
+                return View(eventForm);
             }
 
             var entity = new Event()
             {
                 CreatedOn = DateTime.Now,
-                Description = model.Description,
-                Name = model.Name,
+                Description = eventForm.Description,
+                Name = eventForm.Name,
                 OrganiserId = GetUserId(),
-                TypeId = model.TypeId,
+                TypeId = eventForm.TypeId,
                 Start = start,
                 End = end
             };
 
-            await data.AddAsync(entity);
-            await data.SaveChangesAsync();
+            await dbContext.AddAsync(entity);
+            await dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
         }
@@ -175,46 +192,46 @@ namespace Homies.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var e = await data.Events
+            var searchedEvent = await dbContext.Events
                 .FindAsync(id);
 
-            if (e == null)
+            if (searchedEvent == null)
             {
                 return BadRequest();
             }
 
-            if (e.OrganiserId != GetUserId())
+            if (searchedEvent.OrganiserId != GetUserId())
             {
                 return Unauthorized();
             }
 
-            var model = new EventFormViewModel()
+            var eventToEdit = new EventAddViewModel()
             {
-                Description = e.Description,
-                Name = e.Name,
-                End = e.End.ToString(DataConstants.DateFormat),
-                Start = e.Start.ToString(DataConstants.DateFormat),
-                TypeId = e.TypeId
+                Name = searchedEvent.Name,
+                Description = searchedEvent.Description,
+                End = searchedEvent.End.ToString(DataConstants.DateFormat),
+                Start = searchedEvent.Start.ToString(DataConstants.DateFormat),
+                TypeId = searchedEvent.TypeId
             };
 
-            model.Types = await GetTypes();
+            eventToEdit.Types = await GetTypes();
 
-            return View(model);
+            return View(eventToEdit);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EventFormViewModel model, int id)
+        public async Task<IActionResult> Edit(EventAddViewModel eventForm, int id)
         {
 
-            var e = await data.Events
+            var eventToEdit = await dbContext.Events
                 .FindAsync(id);
 
-            if (e == null)
+            if (eventToEdit == null)
             {
                 return BadRequest();
             }
 
-            if (e.OrganiserId != GetUserId())
+            if (eventToEdit.OrganiserId != GetUserId())
             {
                 return Unauthorized();
             }
@@ -223,41 +240,53 @@ namespace Homies.Controllers
             DateTime end = DateTime.Now;
 
             if (!DateTime.TryParseExact(
-                model.Start,
+                eventForm.Start,
                 DataConstants.DateFormat,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out start))
             {
                 ModelState
-                    .AddModelError(nameof(model.Start), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+                    .AddModelError(nameof(eventForm.Start), $"Invalid date! Format must be: {DataConstants.DateFormat}");
             }
 
             if (!DateTime.TryParseExact(
-                model.End,
+                eventForm.End,
                 DataConstants.DateFormat,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out end))
             {
                 ModelState
-                    .AddModelError(nameof(model.End), $"Invalid date! Format must be: {DataConstants.DateFormat}");
+                    .AddModelError(nameof(eventForm.End), $"Invalid date! Format must be: {DataConstants.DateFormat}");
 
             }
 
             if (!ModelState.IsValid)
             {
-                model.Types = await GetTypes();
-                return View(model);
+                
+                //This is used to show the error messages of the ModelState
+                List<string> errorMessages = new List<string>();
+
+                foreach (var entry in ModelState)
+                {
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        errorMessages.Add(error.ErrorMessage);
+                    }
+                }
+                
+                eventForm.Types = await GetTypes();
+                return View(eventForm);
             }
 
-            e.Start = start;
-            e.End = end;
-            e.Description = model.Description;
-            e.Name = model.Name;
-            e.TypeId = model.TypeId;
+            eventToEdit.Start = start;
+            eventToEdit.End = end;
+            eventToEdit.Description = eventForm.Description;
+            eventToEdit.Name = eventForm.Name;
+            eventToEdit.TypeId = eventForm.TypeId;
 
-            await data.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
         }
@@ -265,11 +294,11 @@ namespace Homies.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var currentEvent = await data.Events
+            var currentEvent = await dbContext.Events
                 .Where(e => e.Id == id)
                 .FirstOrDefaultAsync();
 
-            var eventParticipants = await data.EventParticipants
+            var eventParticipants = await dbContext.EventParticipants
                 .Where(ep => ep.EventId == id)
                 .ToListAsync();
 
@@ -285,11 +314,11 @@ namespace Homies.Controllers
 
             if (eventParticipants != null && eventParticipants.Any())
             {
-                data.EventParticipants.RemoveRange(eventParticipants);
+                dbContext.EventParticipants.RemoveRange(eventParticipants);
             }
 
-            data.Events.Remove(currentEvent);
-            await data.SaveChangesAsync();
+            dbContext.Events.Remove(currentEvent);
+            await dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
 
@@ -298,7 +327,7 @@ namespace Homies.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var model = await data.Events
+            var searchedEvent = await dbContext.Events
                 .Where(e => e.Id == id)
                 .AsNoTracking()
                 .Select(e => new EventDetailsViewModel()
@@ -314,12 +343,12 @@ namespace Homies.Controllers
                 })
                 .FirstOrDefaultAsync();
             
-            if (model == null) 
+            if (searchedEvent == null) 
             {
                 return BadRequest();
             }
 
-            return View(model);
+            return View(searchedEvent);
         }
 
 
@@ -330,7 +359,7 @@ namespace Homies.Controllers
 
         private async Task<IEnumerable<TypeViewModel>> GetTypes()
         {
-            return await data.Types
+            return await dbContext.Types
                 .AsNoTracking()
                 .Select(t => new TypeViewModel
                 {

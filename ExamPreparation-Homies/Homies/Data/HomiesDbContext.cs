@@ -9,6 +9,12 @@ namespace Homies.Data
             : base(options)
         {
         }
+
+        public DbSet<Event> Events { get; set; } = null!;
+        public DbSet<Type> Types { get; set; } = null!;
+        public DbSet<EventParticipant> EventParticipants { get; set; } = null!;
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -47,10 +53,6 @@ namespace Homies.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Event> Events { get; set; }
-
-        public DbSet<Type> Types { get; set; }
-
-        public DbSet<EventParticipant> EventParticipants { get; set; }
+       
     }
 }

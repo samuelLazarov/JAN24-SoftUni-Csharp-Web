@@ -3,7 +3,7 @@ using static Homies.Data.DataConstants;
 
 namespace Homies.Models
 {
-    public class EventFormViewModel
+    public class EventAddViewModel
     {
         [Required(ErrorMessage = RequireErrorMessage)]
         [StringLength(EventNameMaximumLength,

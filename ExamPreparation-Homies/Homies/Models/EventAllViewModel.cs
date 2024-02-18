@@ -2,9 +2,9 @@
 
 namespace Homies.Models
 {
-    public class EventInfoViewModel
+    public class EventAllViewModel
     {
-        public EventInfoViewModel(
+        public EventAllViewModel(
             int id,
             string name,
             DateTime startingTime,
