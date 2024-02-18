@@ -10,6 +10,5 @@
         public int Duration { get; set; }
         public string Details { get; set; } = string.Empty;
         public string Organizer { get; set; } = string.Empty;
-        public bool IsOrganizer { get; set; }
     }
 }

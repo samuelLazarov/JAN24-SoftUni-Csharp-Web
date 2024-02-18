@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using static SeminarHub.Data.Common.DataConstants;
 
 namespace SeminarHub.Models
@@ -34,6 +33,6 @@ namespace SeminarHub.Models
         [Required(ErrorMessage = RequireErrorMessage)]
         public int CategoryId { get; set; }
 
-        public IEnumerable<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
+        public IEnumerable<CategoryViewModel> Categories { get; set; } = new HashSet<CategoryViewModel>();
     }
 }
