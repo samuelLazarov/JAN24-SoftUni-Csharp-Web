@@ -285,6 +285,39 @@ namespace SeminarHub.Controllers
                 return Unauthorized();
             }
 
+            var seminarToDelete = new DeleteSeminarViewModel()
+            {
+                Id = currentSeminar.Id,
+                Topic = currentSeminar.Topic,
+                DateAndTime = currentSeminar.DateAndTime
+            };
+
+            return View(seminarToDelete);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var currentSeminar = await dbContext.Seminars
+                .Where(s => s.Id == id)
+                .Include(s => s.SeminarsParticipants)
+                .FirstOrDefaultAsync();
+
+            var seminarParticipants = await dbContext.SeminarParticipants
+                .Where(sp => sp.SeminarId == id)
+                .ToListAsync();
+
+            if (currentSeminar == null)
+            {
+                return BadRequest();
+            }
+
+            if (currentSeminar.OrganizerId != GetUserId())
+            {
+                return Unauthorized();
+            }
+
             if (seminarParticipants != null && seminarParticipants.Any())
             {
                 dbContext.SeminarParticipants.RemoveRange(seminarParticipants);
@@ -294,8 +327,8 @@ namespace SeminarHub.Controllers
             await dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
-
         }
+
 
         public async Task<IActionResult> Details(int id)
         {
