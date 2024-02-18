@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SeminarHub.Data;
 using SeminarHub.Data.Common;
@@ -10,6 +11,7 @@ using System.Security.Claims;
 
 namespace SeminarHub.Controllers
 {
+    [Authorize]
     public class SeminarController : Controller
     {
         private readonly SeminarHubDbContext dbContext;
@@ -61,6 +63,10 @@ namespace SeminarHub.Controllers
 
                 await dbContext.SaveChangesAsync();
             }
+            else
+            {
+                return RedirectToAction(nameof(All));
+            }
 
             return RedirectToAction(nameof(Joined));
         }
@@ -110,7 +116,7 @@ namespace SeminarHub.Controllers
 
             currentSeminar.SeminarsParticipants.Remove(seminarParticipant);
             await dbContext.SaveChangesAsync();
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Joined));
         }
 
         [HttpGet]

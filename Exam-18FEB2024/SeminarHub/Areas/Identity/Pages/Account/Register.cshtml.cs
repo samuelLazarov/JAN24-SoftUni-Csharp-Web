@@ -59,7 +59,7 @@ namespace SeminarHub.Areas.Identity.Pages.Account
         {
             if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("All", "Event");
+                return RedirectToAction("All", "Seminar");
             }
             ReturnUrl = returnUrl;
             return Page();
