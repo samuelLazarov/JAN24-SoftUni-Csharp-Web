@@ -27,7 +27,7 @@ namespace SeminarHub.Models
         public string DateAndTime { get; set; } = string.Empty;
 
         [Range(DurationMinimum, DurationMaximum, 
-            ErrorMessage = StringLengthErrorMessage)]
+            ErrorMessage = DurationLengthErrorMessage)]
         public int Duration { get; set; }
 
         [Required(ErrorMessage = RequireErrorMessage)]
